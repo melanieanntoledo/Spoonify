@@ -1,0 +1,32 @@
+1.) Add app.js with this code:
+
+const PORT = process.env.PORT || 8080;
+var express = require('express');
+var app = express();
+const path = require('path');
+var http = require('http');
+var server = http.Server(app);
+
+app.use(express.static(__dirname + '/dist'));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'index.html'));
+});
+
+server.listen(PORT, function() {
+  console.log('Chat server running');
+});
+
+2.) In package.json, scripts JSON should have this (most importantly the start and main):
+
+  "scripts": {
+    "start": "node app.js",
+    "main": "index.js",
+    "dev": "webpack --mode development",
+    "build": "webpack --mode production",
+    "heroku-postbuild": "webpack -p"
+  },
+
+3.) In the console, "npm run dev" to build new bundle.js and index.html under dist.
+
+4.) Zip the folder and upload to AWS Elastic Beanstalk
